@@ -3,10 +3,10 @@ defmodule JollaCNAPI.DB.Model.TieComment do
   import Ecto.Changeset
 
   schema "tie_comment" do
-    field(:tie_id, :integer, null: false, comment: "tie slug")
+    field(:tie_id, :integer, null: false, comment: "tie id")
     field(:nickname, :string, null: false, comment: "评论昵称")
-    field(:ip, :string, null: false, default: "", comment: "IP")
-    field(:email, :string, null: false, default: "", comment: "email")
+    field(:ip, :string, null: false, comment: "IP")
+    field(:email, :string, null: true, comment: "email")
     field(:content_md, :string, null: false, comment: "内容(markdown)")
     field(:content, :string, null: false, comment: "内容(html)")
 

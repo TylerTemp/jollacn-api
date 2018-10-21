@@ -1,4 +1,4 @@
-defmodule JollaCNAPI.Router.Post do
+defmodule JollaCNAPI.Router.Tie do
   use Plug.Router
   use Plug.ErrorHandler
   require Logger
@@ -23,24 +23,22 @@ defmodule JollaCNAPI.Router.Post do
 
     sql = "
       SELECT
-        slug,
-        title,
+        id,
         author,
-        cover,
-        description,
-        -- headerimg,
-        -- content_md,
-        -- content,
+        content_md,
+        content,
+        media_previews,
+        medias,
         to_char(inserted_at, 'YYYY-MM-DD HH24:MI:SS') AS inserted_at,
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
-      FROM post
+      FROM tie
       WHERE visiable = TRUE
       LIMIT $1
       OFFSET $2
     "
     args = [limit, offset]
 
-    post_list =
+    tie_list =
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(sql, args)
       |> JollaCNAPI.DB.Util.all()
@@ -48,7 +46,7 @@ defmodule JollaCNAPI.Router.Post do
     count_sql = "
       SELECT
         COUNT(1) AS count
-      FROM post
+      FROM tie
       WHERE visiable = TRUE
       LIMIT $1
       OFFSET $2
@@ -63,7 +61,7 @@ defmodule JollaCNAPI.Router.Post do
     result = %{
       "total" => count,
       "limit" => limit,
-      "post_infos" => post_list
+      "ties" => tie_list
     }
 
     conn
@@ -80,14 +78,14 @@ defmodule JollaCNAPI.Router.Post do
     {:ok, body, conn} = read_body(conn)
     args = :jiffy.decode(body, [:return_maps, :use_nil])
 
-    {status, post_result} =
-      %JollaCNAPI.DB.Model.Post{}
-      |> JollaCNAPI.DB.Model.Post.changeset(args)
+    {status, tie_result} =
+      %JollaCNAPI.DB.Model.Tie{}
+      |> JollaCNAPI.DB.Model.Tie.changeset(args)
       |> JollaCNAPI.DB.Repo.insert()
 
     if status == :error do
       error_msg =
-        case post_result do
+        case tie_result do
           %{errors: errors} ->
             errors
             |> Enum.map(fn
@@ -103,7 +101,7 @@ defmodule JollaCNAPI.Router.Post do
             |> Enum.join("\n")
 
           _ ->
-            inspect(post_result)
+            inspect(tie_result)
         end
 
       conn
@@ -120,7 +118,7 @@ defmodule JollaCNAPI.Router.Post do
       |> send_resp(
         200,
         :jiffy.encode(
-          Map.drop(post_result, [:__struct__, :__meta__, :inserted_at, :updated_at]),
+          Map.drop(tie_result, [:__struct__, :__meta__, :inserted_at, :updated_at]),
           [
             :use_nil
           ]
@@ -129,35 +127,34 @@ defmodule JollaCNAPI.Router.Post do
     end
   end
 
-  get "/:slug" do
+  get "/:tie_id_str" do
+    tie_id = String.to_integer(tie_id_str)
     sql = "
       SELECT
-        slug,
-        title,
+        id,
         author,
-        cover,
-        description,
-        headerimg,
         content_md,
         content,
+        media_previews,
+        medias,
         to_char(inserted_at, 'YYYY-MM-DD HH24:MI:SS') AS inserted_at,
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
-      FROM post
-      WHERE slug = $1
+      FROM tie
+      WHERE id = $1
     "
-    args = [slug]
+    args = [tie_id]
 
-    post =
+    tie =
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(sql, args)
       |> JollaCNAPI.DB.Util.one()
 
-    if post == nil do
+    if tie == nil do
       conn
       |> put_resp_header("Content-Type", "application/json")
       |> send_resp(
         400,
-        :jiffy.encode(%{"message" => "post #{slug} not found"}, [
+        :jiffy.encode(%{"message" => "tie #{tie_id} not found"}, [
           :use_nil
         ])
       )
@@ -166,37 +163,38 @@ defmodule JollaCNAPI.Router.Post do
       |> put_resp_header("Content-Type", "application/json")
       |> send_resp(
         200,
-        :jiffy.encode(post, [
+        :jiffy.encode(tie, [
           :use_nil
         ])
       )
     end
   end
 
-  patch "/:slug" do
+  patch "/:tie_id_str" do
+    tie_id = String.to_integer(tie_id_str)
     {:ok, body, conn} = read_body(conn)
     args = :jiffy.decode(body, [:return_maps, :use_nil])
 
-    case JollaCNAPI.DB.Repo.get(JollaCNAPI.DB.Model.Post, slug) do
+    case JollaCNAPI.DB.Repo.get(JollaCNAPI.DB.Model.Tie, tie_id) do
       nil ->
         conn
         |> put_resp_header("Content-Type", "application/json")
         |> send_resp(
           500,
-          :jiffy.encode(%{"message" => "post #{slug} not found"}, [
+          :jiffy.encode(%{"message" => "tie #{tie_id} not found"}, [
             :use_nil
           ])
         )
 
-      old_post ->
-        {status, post_result} =
-          old_post
-          |> JollaCNAPI.DB.Model.Post.changeset(args)
+      old_tie ->
+        {status, tie_result} =
+          old_tie
+          |> JollaCNAPI.DB.Model.Tie.changeset(args)
           |> JollaCNAPI.DB.Repo.update()
 
         if status == :error do
           error_msg =
-            case post_result do
+            case tie_result do
               %{errors: errors} ->
                 errors
                 |> Enum.map(fn
@@ -212,7 +210,7 @@ defmodule JollaCNAPI.Router.Post do
                 |> Enum.join("\n")
 
               _ ->
-                inspect(post_result)
+                inspect(tie_result)
             end
 
           conn
@@ -229,7 +227,7 @@ defmodule JollaCNAPI.Router.Post do
           |> send_resp(
             200,
             :jiffy.encode(
-              Map.drop(post_result, [:__struct__, :__meta__, :inserted_at, :updated_at]),
+              Map.drop(tie_result, [:__struct__, :__meta__, :inserted_at, :updated_at]),
               [
                 :use_nil
               ]
@@ -239,7 +237,8 @@ defmodule JollaCNAPI.Router.Post do
     end
   end
 
-  get "/:post_slug/comment" do
+  get "/:tie_id_str/comment" do
+    tie_id = String.to_integer(tie_id_str)
     conn = fetch_query_params(conn)
     params = conn.query_params
 
@@ -249,7 +248,7 @@ defmodule JollaCNAPI.Router.Post do
 
     sql = "
       SELECT
-        post_slug,
+        tie_id,
         nickname,
         -- ip,
         -- email,
@@ -258,15 +257,15 @@ defmodule JollaCNAPI.Router.Post do
         -- visiable,
         to_char(inserted_at, 'YYYY-MM-DD HH24:MI:SS') AS inserted_at,
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
-      FROM post_comment
+      FROM tie_comment
       WHERE visiable = TRUE
-        AND post_slug = $1
+        AND tie_id = $1
       LIMIT $2
       OFFSET $3
     "
-    args = [post_slug, limit, offset]
+    args = [tie_id, limit, offset]
 
-    post_comment_list =
+    tie_comment_list =
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(sql, args)
       |> JollaCNAPI.DB.Util.all()
@@ -274,13 +273,13 @@ defmodule JollaCNAPI.Router.Post do
     count_sql = "
       SELECT
         COUNT(1) AS count
-      FROM post_comment
+      FROM tie_comment
       WHERE visiable = TRUE
-        AND post_slug = $1
+        AND tie_id = $1
       LIMIT $2
       OFFSET $3
     "
-    count_args = [post_slug, limit, offset]
+    count_args = [tie_id, limit, offset]
 
     %{"count" => count} =
       JollaCNAPI.DB.Repo
@@ -290,7 +289,7 @@ defmodule JollaCNAPI.Router.Post do
     result = %{
       "total" => count,
       "limit" => limit,
-      "comments" => post_comment_list
+      "comments" => tie_comment_list
     }
 
     conn
@@ -303,7 +302,8 @@ defmodule JollaCNAPI.Router.Post do
     )
   end
 
-  post "/:slug/comment" do
+  post "/:tie_id_str/comment" do
+    tie_id = String.to_integer(tie_id_str)
     {:ok, body, conn} = read_body(conn)
     user_ip = JollaCNAPI.Router.Util.get_ip(conn)
 
@@ -312,12 +312,12 @@ defmodule JollaCNAPI.Router.Post do
       body
       |> :jiffy.decode([:return_maps, :use_nil])
       |> (fn %{"content" => content} = input_args ->
-            Map.merge(input_args, %{"post_slug" => slug, "ip" => user_ip, "content_md" => content})
+            Map.merge(input_args, %{"tie_id" => tie_id, "ip" => user_ip, "content_md" => content})
           end).()
 
     {status, comment_result} =
-      %JollaCNAPI.DB.Model.PostComment{}
-      |> JollaCNAPI.DB.Model.PostComment.changeset(args)
+      %JollaCNAPI.DB.Model.TieComment{}
+      |> JollaCNAPI.DB.Model.TieComment.changeset(args)
       |> JollaCNAPI.DB.Repo.insert()
 
     if status == :error do

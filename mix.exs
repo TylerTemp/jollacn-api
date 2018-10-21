@@ -24,6 +24,7 @@ defmodule JollaCNAPI.MixProject do
         :ecto_sql,
         :postgrex,
         :decimal,
+        :jason,
         # :quantum,
         :timex
       ],
@@ -37,6 +38,7 @@ defmodule JollaCNAPI.MixProject do
       {:ecto_sql, "~> 3.0-pre"},
       {:postgrex, ">= 0.0.0-pre"},
       {:db_connection, "~> 2.0-pre"},
+      {:jason, "~> 1.1"},
       # {:httpoison, "~> 1.0"},
       {:jiffy, "~> 0.14.11"},
       # {:hackney, path: "deps/hackney", override: true},

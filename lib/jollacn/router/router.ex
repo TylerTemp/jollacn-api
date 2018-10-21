@@ -34,6 +34,7 @@ defmodule JollaCNAPI.Router do
   end
 
   forward("/post", to: JollaCNAPI.Router.Post)
+  forward("/tie", to: JollaCNAPI.Router.Tie)
 
   match _ do
     conn

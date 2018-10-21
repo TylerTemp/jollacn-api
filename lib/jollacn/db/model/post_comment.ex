@@ -5,8 +5,8 @@ defmodule JollaCNAPI.DB.Model.PostComment do
   schema "post_comment" do
     field(:post_slug, :string, null: false, comment: "文章slug")
     field(:nickname, :string, null: false, comment: "评论昵称")
-    field(:ip, :string, null: false, default: "", comment: "IP")
-    field(:email, :string, null: false, default: "", comment: "email")
+    field(:ip, :string, null: false, comment: "IP")
+    field(:email, :string, null: true, comment: "email")
     field(:content_md, :string, null: false, comment: "内容(markdown)")
     field(:content, :string, null: false, comment: "内容(html)")
 
