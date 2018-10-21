@@ -20,6 +20,6 @@ bin/jollacn_api foreground
 MIX_ENV=prod mix release --upgrade --env=prod
 mkdir -p ~/release/jollacn_api/releases/${version} && cp _build/prod/rel/jollacn_api/releases/${version}/jollacn_api.tar.gz ~/release/jollacn_api/releases/${version}/jollacn_api.tar.gz
 
-# do upgrade: cd ~/release/jarvis
-bin/jarvis upgrade "${version}"
+# do upgrade: cd ~/release/jollacn_api
+bin/jollacn_api upgrade "${version}"
 ```

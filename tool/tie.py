@@ -52,9 +52,9 @@ elif args['update']:
 
     submit_args = {}
     if '--media' in args:
-        submit_args['medias'] = args['--media']
+        submit_args['medias'] = [{'type': 'img', 'src': src} for src in args['--media']]
     if '--preview' in args:
-        submit_args['media_previews'] = args['--preview']
+        submit_args['media_previews'] = [{'type': 'img', 'src': src} for src in args['--preview']]
 
     assert submit_args
     resp = requests.patch('{}/tie/{}'.format(host, tie_id), data=json.dumps(submit_args))
