@@ -1,7 +1,5 @@
 # JollaCNAPI
 
-## 发布
-
 ## 发布流程 ##
 
 ```bash

@@ -33,7 +33,7 @@ defmodule JollaCNAPI.Router do
     )
   end
 
-  # forward("/", to: JollaCNAPI.Router.CampaignRouter)
+  forward("/post", to: JollaCNAPI.Router.Post)
 
   match _ do
     conn

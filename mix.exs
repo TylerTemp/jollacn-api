@@ -22,9 +22,10 @@ defmodule JollaCNAPI.MixProject do
         :jiffy,
         :logger_file_backend,
         :ecto_sql,
-        :postgrex
+        :postgrex,
+        :decimal,
         # :quantum,
-        # :timex,
+        :timex
       ],
       mod: {JollaCNAPI.Application, []}
     ]
@@ -40,7 +41,8 @@ defmodule JollaCNAPI.MixProject do
       {:jiffy, "~> 0.14.11"},
       # {:hackney, path: "deps/hackney", override: true},
       # {:quantum, ">= 2.2.1"},
-      # {:timex, "~> 3.0"},
+      {:timex, "~> 3.0"},
+      {:decimal, "~> 1.0"},
       {:logger_file_backend, git: "https://github.com/TylerTemp/logger_file_backend.git"},
       {:distillery, "~> 1.5", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
