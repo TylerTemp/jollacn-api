@@ -33,6 +33,24 @@ defmodule JollaCNAPI.Router do
     )
   end
 
+  get "/avatar/visitor/:id" do
+    content =
+      id
+      |> Identicon.hash_input()
+      |> Identicon.pick_color()
+      |> Identicon.build_grid()
+      |> Identicon.filter_odd_squares()
+      |> Identicon.build_pixel_map()
+      |> Identicon.draw_image()
+
+    conn
+    |> put_resp_header("Content-Type", "image/png")
+    |> send_resp(
+      200,
+      content
+    )
+  end
+
   forward("/post", to: JollaCNAPI.Router.Post)
   forward("/tie", to: JollaCNAPI.Router.Tie)
 

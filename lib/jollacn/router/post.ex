@@ -54,7 +54,7 @@ defmodule JollaCNAPI.Router.Post do
     "
     count_args = []
 
-    %{"count" => count } =
+    %{"count" => count} =
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(count_sql, count_args)
       |> JollaCNAPI.DB.Util.one()
@@ -250,8 +250,8 @@ defmodule JollaCNAPI.Router.Post do
       SELECT
         post_slug,
         nickname,
-        -- ip,
-        -- email,
+        ip,
+        email,
         content_md,
         content,
         -- visiable,
@@ -269,6 +269,14 @@ defmodule JollaCNAPI.Router.Post do
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(sql, args)
       |> JollaCNAPI.DB.Util.all()
+      |> Enum.map(fn %{"ip" => ip, "email" => email} = tie_comment ->
+        hash = :md5 |> :crypto.hash("#{ip}_#{email}") |> Base.encode16()
+        avatar = "/avatar/visitor/#{hash}"
+
+        tie_comment
+        |> Map.merge(%{"avatar" => avatar})
+        |> Map.drop(["ip", "email"])
+      end)
 
     count_sql = "
       SELECT
@@ -347,16 +355,23 @@ defmodule JollaCNAPI.Router.Post do
         ])
       )
     else
+      ip = user_ip
+      email = Map.get(args, nil)
+      hash = :md5 |> :crypto.hash("#{ip}_#{email}") |> Base.encode16()
+      avatar = "/avatar/visitor/#{hash}"
+
+      result =
+        comment_result
+        |> Map.drop([:__struct__, :__meta__, :inserted_at, :updated_at])
+        |> Map.merge(%{avatar: avatar})
+
       conn
       |> put_resp_header("Content-Type", "application/json")
       |> send_resp(
         200,
-        :jiffy.encode(
-          Map.drop(comment_result, [:__struct__, :__meta__, :inserted_at, :updated_at]),
-          [
-            :use_nil
-          ]
-        )
+        :jiffy.encode(result, [
+          :use_nil
+        ])
       )
     end
   end
