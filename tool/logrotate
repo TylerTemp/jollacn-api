@@ -1,0 +1,18 @@
+/home/tyler/release/jollaapi/log/*.log {
+	daily
+	missingok
+	rotate 60
+	notifempty
+	create 0640 root root
+	dateext
+}
+
+
+/var/log/supervisor/jollaapi/*.log {
+	daily
+	missingok
+	rotate 60
+	notifempty
+	create 0640 root root
+	dateext
+}
