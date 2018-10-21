@@ -35,8 +35,9 @@ defmodule JollaCNAPI.Router.Post do
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
       FROM post
       WHERE visiable = TRUE
-      LIMIT $1
+      ORDER BY inserted_at DESC
       OFFSET $2
+      LIMIT $1
     "
     args = [limit, offset]
 
@@ -50,12 +51,10 @@ defmodule JollaCNAPI.Router.Post do
         COUNT(1) AS count
       FROM post
       WHERE visiable = TRUE
-      LIMIT $1
-      OFFSET $2
     "
-    count_args = [limit, offset]
+    count_args = []
 
-    %{"count" => count} =
+    %{"count" => count } =
       JollaCNAPI.DB.Repo
       |> Ecto.Adapters.SQL.query!(count_sql, count_args)
       |> JollaCNAPI.DB.Util.one()
@@ -261,8 +260,8 @@ defmodule JollaCNAPI.Router.Post do
       FROM post_comment
       WHERE visiable = TRUE
         AND post_slug = $1
-      LIMIT $2
       OFFSET $3
+      LIMIT $2
     "
     args = [post_slug, limit, offset]
 
@@ -277,10 +276,8 @@ defmodule JollaCNAPI.Router.Post do
       FROM post_comment
       WHERE visiable = TRUE
         AND post_slug = $1
-      LIMIT $2
-      OFFSET $3
     "
-    count_args = [post_slug, limit, offset]
+    count_args = [post_slug]
 
     %{"count" => count} =
       JollaCNAPI.DB.Repo

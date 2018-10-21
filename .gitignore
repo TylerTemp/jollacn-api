@@ -27,3 +27,6 @@ jollacn_api-*.tar
 
 config/dev.exs
 config/prod.exs
+
+*.py[c|o]
+__pycache__/

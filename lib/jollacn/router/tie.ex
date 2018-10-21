@@ -33,8 +33,9 @@ defmodule JollaCNAPI.Router.Tie do
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
       FROM tie
       WHERE visiable = TRUE
-      LIMIT $1
+      ORDER BY inserted_at DESC
       OFFSET $2
+      LIMIT $1
     "
     args = [limit, offset]
 
@@ -48,10 +49,8 @@ defmodule JollaCNAPI.Router.Tie do
         COUNT(1) AS count
       FROM tie
       WHERE visiable = TRUE
-      LIMIT $1
-      OFFSET $2
     "
-    count_args = [limit, offset]
+    count_args = []
 
     %{"count" => count} =
       JollaCNAPI.DB.Repo
@@ -260,8 +259,8 @@ defmodule JollaCNAPI.Router.Tie do
       FROM tie_comment
       WHERE visiable = TRUE
         AND tie_id = $1
-      LIMIT $2
       OFFSET $3
+      LIMIT $2
     "
     args = [tie_id, limit, offset]
 
@@ -276,10 +275,9 @@ defmodule JollaCNAPI.Router.Tie do
       FROM tie_comment
       WHERE visiable = TRUE
         AND tie_id = $1
-      LIMIT $2
-      OFFSET $3
     "
-    count_args = [tie_id, limit, offset]
+
+    count_args = [tie_id]
 
     %{"count" => count} =
       JollaCNAPI.DB.Repo
