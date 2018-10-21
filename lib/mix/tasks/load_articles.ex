@@ -1,7 +1,11 @@
 defmodule Mix.Tasks.LoadArticles do
   use Mix.Task
 
-  def run([source_file]) do
+  def run([source_file | rest]) do
+    python = case rest do
+      [py_exe | _] -> py_exe
+      _ -> "python"
+    end
     {:ok, _} = Application.ensure_all_started(:jollacn_api)
 
     content =
@@ -24,7 +28,7 @@ defmodule Mix.Tasks.LoadArticles do
          } = article ->
         description = Map.get(article, "description")
         cover = Map.get(article, "cover")
-        content_html = markdown_to_html(content_md)
+        content_html = markdown_to_html(content_md, python)
         inserted_at = get_time(create_time)
         updated_at = get_time(edit_time)
 
@@ -62,10 +66,10 @@ defmodule Mix.Tasks.LoadArticles do
     |> Timex.Timezone.convert(timezone)
   end
 
-  def markdown_to_html(md) do
+  def markdown_to_html(md, python \\ "python") do
     convert_python_file = Path.join([File.cwd!(), "tool", "md.py"])
     # IO.puts("running file #{convert_python_file}")
-    {result, 0} = System.cmd("python", [convert_python_file, md])
+    {result, 0} = System.cmd(python, [convert_python_file, md])
     result
   end
 end

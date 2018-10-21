@@ -76,6 +76,8 @@ defmodule JollaCNAPI.Router.Tie do
   post "/" do
     {:ok, body, conn} = read_body(conn)
     args = :jiffy.decode(body, [:return_maps, :use_nil])
+    # raw_args = :jiffy.decode(body, [:return_maps, :use_nil])
+    # args = Map.merge(%{"medias" => [], "media_previews" => []}, raw_args)
 
     {status, tie_result} =
       %JollaCNAPI.DB.Model.Tie{}
@@ -171,6 +173,7 @@ defmodule JollaCNAPI.Router.Tie do
     {:ok, body, conn} = read_body(conn)
     args = :jiffy.decode(body, [:return_maps, :use_nil])
 
+    # IO.puts("try search #{tie_id}")
     case JollaCNAPI.DB.Repo.get(JollaCNAPI.DB.Model.Tie, tie_id) do
       nil ->
         conn
@@ -183,10 +186,12 @@ defmodule JollaCNAPI.Router.Tie do
         )
 
       old_tie ->
+        # IO.puts("try update")
         {status, tie_result} =
           old_tie
           |> JollaCNAPI.DB.Model.Tie.changeset(args)
           |> JollaCNAPI.DB.Repo.update()
+        # IO.puts("done")
 
         if status == :error do
           error_msg =

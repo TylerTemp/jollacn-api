@@ -5,15 +5,26 @@ defmodule JollaCNAPI.DB.Util.Type.JSON do
 
   def cast(any), do: {:ok, any}
 
+  # def load(value) do
+  #   IO.puts("try load #{inspect value}")
+  #   result = :jiffy.decode(value, [:use_nil, :return_maps])
+  #   IO.puts("load #{inspect value} to #{inspect result}")
+  #   {:ok, result}
+  # end
+
   def load(value) do
-    result = :jiffy.decode(value, [:use_nil, :return_maps])
+    # IO.puts("try load #{inspect value}")
+    # result = :jiffy.decode(value, [:use_nil, :return_maps])
+    result = value
     # IO.puts("load #{inspect value} to #{inspect result}")
-    result
+    {:ok, result}
   end
 
   def dump(value) do
-    # result = :jiffy.encode(value, [:use_nil])
+    # IO.puts("try dump #{inspect value}")
+    # result = :jiffy.encode(value, [:use_nil, :return_maps])
     result = value
+    # result = value
     # IO.puts("dump #{inspect value} to #{inspect result}")
     {:ok, result}
   end

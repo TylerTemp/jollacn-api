@@ -8,11 +8,14 @@ import nlcontinuous
 import md_video
 import underline
 # from ..markdown_gridtables import mdx_grid_tables
+from amazedown_patched import \
+    link_icon_tab, link_image_block, image_block, \
+    list_gallery, list_avg_gallery, quote_by
 
 logger = logging.getLogger('MARKDOWN')
 logger.setLevel(logging.CRITICAL)
 
-__all__ = ['md2html', 'html2md', 'escape']
+# __all__ = ['md2html', 'html2md', 'escape']
 
 extend = [
     nlcontinuous.makeExtension(),
@@ -89,25 +92,21 @@ def escape(content):
     return bleach.clean(content, tags=white_tags, attributes=attributes)
 
 
+def jolla_md_to_html(md):
+    return md2html(
+            md,
+            extensions=[
+                underline.makeExtension(tag='strong', cls='underline'),
+                image_block.makeExtension(),
+                link_image_block.makeExtension(),
+                link_icon_tab.makeExtension(host='notexists.top'),
+                list_gallery.makeExtension(),
+                list_avg_gallery.makeExtension(),
+                quote_by.makeExtension(),
+            ])
+
 if __name__ == '__main__':
     import sys
-    from amazedown_patched import \
-        link_icon_tab, link_image_block, image_block, \
-        list_gallery, list_avg_gallery, quote_by
-
-
-    def jolla_md_to_html(md):
-        return md2html(
-                md,
-                extensions=[
-                    underline.makeExtension(tag='strong', cls='underline'),
-                    image_block.makeExtension(),
-                    link_image_block.makeExtension(),
-                    link_icon_tab.makeExtension(host='notexists.top'),
-                    list_gallery.makeExtension(),
-                    list_avg_gallery.makeExtension(),
-                    quote_by.makeExtension(),
-                ])
 
     # if len(sys.argv) <= 2:
     #     print('reading')
