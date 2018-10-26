@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <atom:link href="<%= protocol %>://<%= host %>/rss.xml" rel="self" type="application/rss+xml" />
+    <title>Jolla中文博客</title>
+    <description>最新最及时最权威Jolla中文资讯</description>
+    <link><%= protocol %>://<%= host %></link>
+    <language>zh-CN</language>
+    <copyright>2015 - <%= this_year %> TylerTemp. CC BY-NC-SA 4.0</copyright>
+    <webMaster>tylertempdev@gmail.com (TylerTemp)</webMaster>
+    <image>
+      <url><%= protocol %>://<%= host %>/favicon.png</url>
+      <link><%= protocol %>://<%= host %></link>
+      <title>Jolla中文博客</title>
+    </image>
+    <%= for each <- articles do %>
+    <item>
+      <title><%= each["title"] %></title>
+      <guid isPermaLink="false"><%= each["slug"] %></guid>
+      <link><%= protocol %>://<%= host %><%= each["slug"] %></link>
+      <comments><%= protocol %>://<%= host %><%= each["slug"] %>#comment</comments>
+      <%= if false do %>
+        <author><%= each["author"] %></author>
+      <% end %>
+      <pubDate><%= each["pub_date"] %></pubDate>
+      <description>
+        <%= for src <- each["medias"] do %>
+          &lt;img src="<%= src %>" /&gt;
+        <% end %>
+        <%= if each["description"] do %>
+          each["description"]
+          &lt;hr /&gt;
+        <% end %>
+        <%= each["content"] %>
+      </description>
+    </item>
+    <% end %>
+  </channel>
+</rss>

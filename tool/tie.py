@@ -1,7 +1,7 @@
 """
 Usage:
     tie.py new <file> [options]
-    tie.py update <id> [options]
+    tie.py update <id> [<file>] [options]
 
 Options:
     -m <media>..., --media=<media>...             medias
@@ -28,9 +28,12 @@ if args['new']:
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    sep = content.split('\n\n')
+    sep = content.split('\n\n\n')
 
-    markdown = sep[1]
+    # assert False, sep
+
+    markdown = sep[1].strip() + '\n'
+
     html = jolla_md_to_html(markdown)
 
     print(markdown)
@@ -45,6 +48,7 @@ if args['new']:
     resp = requests.post(host + '/tie', data=json.dumps(submit_args))
     print(resp.text)
     print(resp.status_code)
+    print(resp.json()['id'])
 
 elif args['update']:
     method = 'patch'
@@ -55,6 +59,26 @@ elif args['update']:
         submit_args['medias'] = [{'type': 'img', 'src': src} for src in args['--media']]
     if '--preview' in args:
         submit_args['media_previews'] = [{'type': 'img', 'src': src} for src in args['--preview']]
+
+    if args['<file>']:
+        with open(args['<file>'], 'r', encoding='utf-8') as f:
+            content = f.read()
+
+        sep = content.split('\n\n\n')
+
+        # assert False, sep
+
+        markdown = sep[1].strip() + '\n'
+
+        # assert False, markdown
+
+        html = jolla_md_to_html(markdown)
+        submit_args.update({
+            'content_md': markdown,
+            'content': html
+        })
+
+    # assert False, submit_args
 
     assert submit_args
     resp = requests.patch('{}/tie/{}'.format(host, tie_id), data=json.dumps(submit_args))

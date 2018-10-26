@@ -53,6 +53,7 @@ defmodule JollaCNAPI.Router do
 
   forward("/post", to: JollaCNAPI.Router.Post)
   forward("/tie", to: JollaCNAPI.Router.Tie)
+  forward("/rss.xml", to: JollaCNAPI.Router.RSS)
 
   match _ do
     conn

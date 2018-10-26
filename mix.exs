@@ -4,7 +4,7 @@ defmodule JollaCNAPI.MixProject do
   def project do
     [
       app: :jollacn_api,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -28,7 +28,10 @@ defmodule JollaCNAPI.MixProject do
         # :quantum,
         :identicon,
         :egd,
-        :timex
+        :timex,
+        :eex,
+        :calendar,
+        :html_entities,
       ],
       mod: {JollaCNAPI.Application, []}
     ]
@@ -49,6 +52,8 @@ defmodule JollaCNAPI.MixProject do
       {:decimal, "~> 1.0"},
       {:identicon, git: "https://github.com/Kociamber/identicon.git"},
       {:egd, github: "erlang/egd"},
+      {:calendar, "~> 0.17.4"},
+      {:html_entities, "~> 0.4"},
       {:logger_file_backend, git: "https://github.com/TylerTemp/logger_file_backend.git"},
       {:distillery, "~> 1.5", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
