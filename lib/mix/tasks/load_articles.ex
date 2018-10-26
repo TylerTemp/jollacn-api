@@ -2,10 +2,12 @@ defmodule Mix.Tasks.LoadArticles do
   use Mix.Task
 
   def run([source_file | rest]) do
-    python = case rest do
-      [py_exe | _] -> py_exe
-      _ -> "python"
-    end
+    python =
+      case rest do
+        [py_exe | _] -> py_exe
+        _ -> "python"
+      end
+
     {:ok, _} = Application.ensure_all_started(:jollacn_api)
 
     content =

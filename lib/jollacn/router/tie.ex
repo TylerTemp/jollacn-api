@@ -191,6 +191,7 @@ defmodule JollaCNAPI.Router.Tie do
           old_tie
           |> JollaCNAPI.DB.Model.Tie.changeset(args)
           |> JollaCNAPI.DB.Repo.update()
+
         # IO.puts("done")
 
         if status == :error do

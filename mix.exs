@@ -4,7 +4,7 @@ defmodule JollaCNAPI.MixProject do
   def project do
     [
       app: :jollacn_api,
-      version: "0.1.2",
+      version: "0.1.3",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -31,7 +31,7 @@ defmodule JollaCNAPI.MixProject do
         :timex,
         :eex,
         :calendar,
-        :html_entities,
+        :html_entities
       ],
       mod: {JollaCNAPI.Application, []}
     ]
