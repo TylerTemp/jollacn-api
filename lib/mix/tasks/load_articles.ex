@@ -11,7 +11,8 @@ defmodule Mix.Tasks.LoadArticles do
     {:ok, _} = Application.ensure_all_started(:jollacn_api)
 
     content =
-      source_file |> File.read!()
+      source_file
+      |> File.read!()
       |> String.replace("https://dn-jolla.qbox.me", "http://q-jolla.notexists.top")
 
     articles = :jiffy.decode(content, [:use_nil, :return_maps])
