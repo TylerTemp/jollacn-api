@@ -34,8 +34,6 @@ defmodule JollaCNAPI.Router.Sitemap do
       FROM tie
       WHERE visiable = TRUE
       ORDER BY inserted_at DESC
-      OFFSET 0
-      LIMIT 10
     "
     tie_args = []
 
@@ -75,8 +73,6 @@ defmodule JollaCNAPI.Router.Sitemap do
       FROM post
       WHERE visiable = TRUE
       ORDER BY inserted_at DESC
-      OFFSET 0
-      LIMIT 3
     "
     post_args = []
 
