@@ -1,4 +1,4 @@
-defmodule Mix.Tasks.LoadArticles do
+defmodule Mix.Tasks.Article.Load do
   use Mix.Task
 
   def run([source_file | rest]) do

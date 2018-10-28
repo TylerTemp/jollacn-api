@@ -24,7 +24,7 @@ echo "version=${version}"
 MIX_ENV=prod mix release --upgrade --env=prod
 mkdir -p ~/release/jollacn_api/releases/${version} && cp _build/prod/rel/jollacn_api/releases/${version}/jollacn_api.tar.gz ~/release/jollacn_api/releases/${version}/jollacn_api.tar.gz
 mkdir ~/release/jollacn_api/template
-rsync -r --progress lib/jollacn/template ~/release/jollacn_api
+rsync -r --progress lib/jollacn_api/template ~/release/jollacn_api
 
 # do upgrade: cd ~/release/jollacn_api
 bin/jollacn_api upgrade "${version}"

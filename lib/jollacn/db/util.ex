@@ -94,6 +94,12 @@ defmodule JollaCNAPI.DB.Util do
           timetuple_formatter(timetuple, datetime_config)
         }
 
+      {key, %NaiveDateTime{} = naive_datetime} ->
+        {
+          key,
+          naive_datetime_formatter(naive_datetime, datetime_config)
+        }
+
       {key, decimal = %Decimal{}} ->
         {key, decimal_formatter(decimal, decimal_config)}
 
@@ -121,6 +127,35 @@ defmodule JollaCNAPI.DB.Util do
       ) do
     timetuple
     |> timetuple_formatter(:datetime)
+    |> Timex.format!(datetime_format, :strftime)
+  end
+
+  def naive_datetime_formatter(%NaiveDateTime{} = naive_datetime, nil) do
+    naive_datetime
+  end
+
+  def naive_datetime_formatter(%NaiveDateTime{} = naive_datetime, :datetime) do
+    naive_datetime_formatter(naive_datetime, {"Asia/Shanghai", :datetime})
+  end
+
+  def naive_datetime_formatter(%NaiveDateTime{} = naive_datetime, {timezone, :datetime}) do
+    timezone_obj = Timex.Timezone.get(timezone, Timex.now())
+    Timex.Timezone.convert(naive_datetime, timezone_obj)
+  end
+
+  def naive_datetime_formatter(
+        %NaiveDateTime{} = naive_datetime,
+        {datetime_format, :strftime}
+      ) do
+    naive_datetime_formatter(naive_datetime, {datetime_format, "Asia/Shanghai", :strftime})
+  end
+
+  def naive_datetime_formatter(
+        %NaiveDateTime{} = naive_datetime,
+        {datetime_format, timezone, :strftime}
+      ) do
+    naive_datetime
+    |> naive_datetime_formatter({timezone, :datetime})
     |> Timex.format!(datetime_format, :strftime)
   end
 

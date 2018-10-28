@@ -15,7 +15,9 @@ config :jollacn_api, JollaCNAPI.DB.Repo,
   port: "5432",
   log: :info
 
-config :jollacn_api, port: 8082
+config :jollacn_api,
+  port: 8082,
+  jwt_secret: "example_jwt_secret"
 
 config :logger,
   # handle_otp_reports: false,

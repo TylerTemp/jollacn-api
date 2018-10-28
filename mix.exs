@@ -4,7 +4,7 @@ defmodule JollaCNAPI.MixProject do
   def project do
     [
       app: :jollacn_api,
-      version: "0.1.5",
+      version: "0.1.6",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -31,7 +31,9 @@ defmodule JollaCNAPI.MixProject do
         :timex,
         :eex,
         :calendar,
-        :html_entities
+        :html_entities,
+        :comeonin,
+        :argon2_elixir
       ],
       mod: {JollaCNAPI.Application, []}
     ]
@@ -54,6 +56,8 @@ defmodule JollaCNAPI.MixProject do
       {:egd, github: "erlang/egd"},
       {:calendar, "~> 0.17.4"},
       {:html_entities, "~> 0.4"},
+      {:comeonin, "~> 4.0"},
+      {:argon2_elixir, "~> 1.2"},
       {:logger_file_backend, git: "https://github.com/TylerTemp/logger_file_backend.git"},
       {:distillery, "~> 1.5", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},

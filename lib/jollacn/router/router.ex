@@ -10,6 +10,15 @@ defmodule JollaCNAPI.Router do
   #   pass: ["text/*"],
   #   json_decoder: Poison
   # plug(Plug.MethodOverride)
+  plug(JollaCNAPI.Plug.Auth,
+    path: [
+      %{method: :post, path: "post", permission: %{must: ["new_post"]}},
+      %{method: :patch, path: "post", permission: %{must: ["update_post"]}},
+      %{method: :post, path: "tie", permission: %{must: ["new_tie"]}},
+      %{method: :patch, path: "tie", permission: %{must: ["update_tie"]}}
+    ]
+  )
+
   plug(:match)
   plug(:dispatch)
 
@@ -51,6 +60,7 @@ defmodule JollaCNAPI.Router do
     )
   end
 
+  forward("/user", to: JollaCNAPI.Router.User)
   forward("/post", to: JollaCNAPI.Router.Post)
   forward("/tie", to: JollaCNAPI.Router.Tie)
   forward("/feed", to: JollaCNAPI.Router.RSS)
