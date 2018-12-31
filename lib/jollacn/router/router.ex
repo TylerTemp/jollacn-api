@@ -32,11 +32,13 @@ defmodule JollaCNAPI.Router do
           nil
       end
 
+    env = Application.get_env(:jollacn_api, :env, nil)
+
     conn
     |> put_resp_header("Content-Type", "application/json")
     |> send_resp(
       200,
-      :jiffy.encode(%{"env" => "#{Mix.env()}", "message" => "pong", "version" => version}, [
+      :jiffy.encode(%{"env" => "#{env}", "message" => "pong", "version" => version}, [
         :use_nil
       ])
     )

@@ -30,3 +30,4 @@ config/prod.exs
 
 *.py[c|o]
 __pycache__/
+/tool/account.json

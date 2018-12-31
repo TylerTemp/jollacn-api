@@ -1,86 +1,78 @@
 """
 Usage:
-    tie.py new <file> [options]
-    tie.py update <id> [<file>] [options]
+    tie.py [options] <folder>
+    tie.py [options] <tie_id> <folder>
 
 Options:
-    -m <media>..., --media=<media>...             medias
-    -p <preview>..., --preview=<preview>...   preview medias
     -h <host>, --host=<host>                      server host
+    -u <user>, --user=<user>
+    -p <pwd>, --pwd=<pwd>
 """
 
 import json
+import os
 import requests
 import docpie
 from md import jolla_md_to_html
+from jwt_login import LoginReq
+
+# import logging
+# from docpie import bashlog
+#
+# bashlog.stdoutlogger(logging.getLogger(), logging.DEBUG)
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
 
 args = docpie.docpie(__doc__, appearedonly=True, help=False)
 
-host = args.get('--host', 'https://notexists.top/api')
+host = args.get('--host', 'https://notexists.top') + '/api'
+if not host.startswith('http'):
+    host = 'http://' + host
 
-if args['new']:
-    method = 'post'
+print('get host {}'.format(host))
+user = args.get('--user', None)
+if user:
+    print('get user from input')
+    pwd = args['--pwd']
+else:
+    print('get user from account.json')
+    with open(os.path.normpath(os.path.join(__file__, '..', 'account.json')), 'r', encoding='utf-8') as f:
+        account = json.load(f)
+    user = account['username']
+    pwd = account['password']
 
-    filepath = args['<file>']
-    with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
+login_req = LoginReq(user, pwd, host)
 
-    sep = content.split('\n\n\n')
+folder = args['<folder>']
 
-    # assert False, sep
+print('get folder {}'.format(folder))
 
-    markdown = sep[1].strip() + '\n'
+with open(os.path.join(folder, 'translate.md'), 'r', encoding='utf-8') as f:
+    content = f.read()
+markdown = content.rstrip() + '\n'
+html = jolla_md_to_html(markdown)
 
-    html = jolla_md_to_html(markdown)
+with open(os.path.join(folder, 'meta.json'), 'r', encoding='utf-8') as f:
+    meta = json.load(f)
 
-    print(markdown)
-    print(html)
+submit_args = {
+    'author': 'TylerTemp',
+    'content': html,
+    'content_md': markdown,
+}
 
-    submit_args = {
-        'author': 'TylerTemp',
-        'content': html,
-        'content_md': markdown,
-    }
+submit_args.update(meta)
 
+print(submit_args)
+
+tie_id = args.get('<tie_id>', None)
+
+if tie_id:
+    resp = requests.patch('{}/tie/{}'.format(host, tie_id), json=submit_args)
+else:
     resp = requests.post(host + '/tie', data=json.dumps(submit_args))
-    print(resp.text)
-    print(resp.status_code)
-    print(resp.json()['id'])
 
-elif args['update']:
-    method = 'patch'
-    tie_id = int(args['<id>'])
-
-    submit_args = {}
-    if '--media' in args:
-        submit_args['medias'] = [{'type': 'img', 'src': src} for src in args['--media']]
-    if '--preview' in args:
-        submit_args['media_previews'] = [{'type': 'img', 'src': src} for src in args['--preview']]
-
-    if args['<file>']:
-        with open(args['<file>'], 'r', encoding='utf-8') as f:
-            content = f.read()
-
-        sep = content.split('\n\n\n')
-
-        # assert False, sep
-
-        markdown = sep[1].strip() + '\n'
-
-        # assert False, markdown
-
-        html = jolla_md_to_html(markdown)
-        submit_args.update({
-            'content_md': markdown,
-            'content': html
-        })
-
-    # assert False, submit_args
-
-    assert submit_args
-    resp = requests.patch('{}/tie/{}'.format(host, tie_id), data=json.dumps(submit_args))
-    print(resp.text)
-    print(resp.status_code)
+print(resp.text)
+print(resp.status_code)
+print('tie id: {id}'.format(**resp.json()))

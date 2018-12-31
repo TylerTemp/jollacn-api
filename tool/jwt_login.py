@@ -38,7 +38,7 @@ def get_token(name, password, host=None):
 
 class LoginReq(object):
 
-    def __init__(name, password, host=None):
+    def __init__(self, name, password, host=None):
         self.name = name
         self.password = password
         self.host = host
@@ -47,26 +47,26 @@ class LoginReq(object):
     def login(self):
         self.token = login(self.name, self.password, self.host)
 
-    def post(**kwargs):
-        return self.call_method('post', **kwargs)
+    def post(self, *args, **kwargs):
+        return self.call_method('post', *args, **kwargs)
 
-    def get(**kwargs):
-        return self.call_method('get', **kwargs)
+    def get(self, *args, **kwargs):
+        return self.call_method('get', *args, **kwargs)
 
-    def patch(**kwargs):
-        return self.call_method('patch', **kwargs)
+    def patch(self, *args, **kwargs):
+        return self.call_method('patch', *args, **kwargs)
 
-    def put(**kwargs):
-        return self.call_method('put', **kwargs)
+    def put(self, *args, **kwargs):
+        return self.call_method('put', *args, **kwargs)
 
-    def call_method(self, method, **kwargs):
+    def call_method(self, method, *args, **kwargs):
         headers = kwargs.pop('headers', {})
         headers['Authorization'] = 'Bearer {}'.format(self.token)
-        kwargs['header'] = headers
-        resp = requests.request(method, **kwargs)
+        kwargs['headers'] = headers
+        resp = requests.request(method, *args, **kwargs)
         if resp.status_code == 401 and resp.json()['message'].startswith('token expired'):
             self.login()
-        return requests.request(method, **kwargs)
+        return requests.request(method, *args, **kwargs)
 
 if __name__ == '__main__':
     import sys

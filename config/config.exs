@@ -17,6 +17,7 @@ config :jollacn_api, JollaCNAPI.DB.Repo,
 
 config :jollacn_api,
   port: 8082,
+  env: Mix.env(),
   jwt_secret: "example_jwt_secret"
 
 config :logger,
