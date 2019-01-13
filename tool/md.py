@@ -96,12 +96,42 @@ def jolla_md_to_html(md):
     return md2html(
             md,
             extensions=[
+                nlcontinuous.makeExtension(),
+                md_video.makeExtension(crossorigin="anonymous"),
+                # define attributes, {: #someid .someclass somekey='some value' }
+                # 'markdown.extensions.attr_list',
+                # use fenced code block by 3 back quotes
+                'markdown.extensions.fenced_code',
+                # footnotes, text[^name]\n\n[^name]: explain
+                'markdown.extensions.footnotes',
+                'markdown.extensions.tables',
+                # new line to <br />
+                # 'markdown.extensions.nl2br',
+                # code highlight, and <pre><code></code></pre> added
+                'markdown.extensions.codehilite',
+                # ++text++ for <ins>text</ins> and ~~text~~ for <del>text</del>
+                'del_ins',
+                # add '_blank' for links
+                # markdown_newtab.makeExtension(),
+                # table extend
+                # mdx_grid_tables.makeExtension(),
+                # replace <<, >> , ..., ect to HTML entity equivalents
+                # 'markdown.extensions.smarty',
+                # Table of Contents, https://pythonhosted.org/Markdown/extensions/toc.html
+                # add menu in table at the head by [TOC] at the top
+                'markdown.extensions.toc',
+                # convert any [[text]] to <a href="/text/" class="wikilink">text</a>
+                # 'markdown.extensions.wikilinks',
+                # https://pythonhosted.org/Markdown/extensions/admonition.html
+                # !!! danger
+                #     some text
+                # 'markdown.extensions.admonition'
                 underline.makeExtension(tag='strong', cls='underline'),
-                image_block.makeExtension(),
-                link_image_block.makeExtension(),
-                link_icon_tab.makeExtension(host='notexists.top'),
-                list_gallery.makeExtension(),
-                list_avg_gallery.makeExtension(),
+                # image_block.makeExtension(),
+                # link_image_block.makeExtension(),
+                # link_icon_tab.makeExtension(host='notexists.top'),
+                # list_gallery.makeExtension(),
+                # list_avg_gallery.makeExtension(),
                 quote_by.makeExtension(),
             ])
 
