@@ -66,7 +66,8 @@ class LoginReq(object):
         resp = requests.request(method, *args, **kwargs)
         if resp.status_code == 401 and resp.json()['message'].startswith('token expired'):
             self.login()
-        return requests.request(method, *args, **kwargs)
+            return requests.request(method, *args, **kwargs)
+        return resp
 
 if __name__ == '__main__':
     import sys

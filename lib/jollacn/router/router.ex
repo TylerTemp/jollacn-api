@@ -15,7 +15,9 @@ defmodule JollaCNAPI.Router do
       %{method: :post, path: "post", permission: %{must: ["new_post"]}},
       %{method: :patch, path: "post", permission: %{must: ["update_post"]}},
       %{method: :post, path: "tie", permission: %{must: ["new_tie"]}},
-      %{method: :patch, path: "tie", permission: %{must: ["update_tie"]}}
+      %{method: :patch, path: "tie", permission: %{must: ["update_tie"]}},
+      %{method: :post, path: "author", permission: %{must: ["new_author"]}},
+      %{method: :patch, path: "author", permission: %{must: ["update_author"]}},
     ]
   )
 
@@ -65,6 +67,7 @@ defmodule JollaCNAPI.Router do
   forward("/user", to: JollaCNAPI.Router.User)
   forward("/post", to: JollaCNAPI.Router.Post)
   forward("/tie", to: JollaCNAPI.Router.Tie)
+  forward("/author", to: JollaCNAPI.Router.Author)
   forward("/feed", to: JollaCNAPI.Router.RSS)
   forward("/sitemap", to: JollaCNAPI.Router.Sitemap)
 

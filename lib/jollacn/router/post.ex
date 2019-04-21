@@ -139,6 +139,11 @@ defmodule JollaCNAPI.Router.Post do
         headerimg,
         content_md,
         content,
+        tags,
+        source_type,
+        source_url,
+        source_title,
+        source_author,
         to_char(inserted_at, 'YYYY-MM-DD HH24:MI:SS') AS inserted_at,
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
       FROM post

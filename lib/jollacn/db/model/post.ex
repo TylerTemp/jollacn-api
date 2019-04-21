@@ -11,6 +11,12 @@ defmodule JollaCNAPI.DB.Model.Post do
     field(:headerimg, :string, null: true, comment: "顶部图像")
     field(:content_md, :string, null: false, comment: "内容(Markdown)")
     field(:content, :string, null: false, comment: "内容(Html)")
+    field(:tags, {:array, :string}, null: true, comment: "标签")
+
+    field(:source_type, :string, null: true, comment: "null: 未知；translation：翻译；original: 原创")
+    field(:source_url, :string, null: true, comment: "原文url")
+    field(:source_title, :string, null: true, comment: "原文标题")
+    field(:source_author, :string, null: true, comment: "原文作者")
 
     field(:visiable, :boolean, null: false, default: true, comment: "可见")
 
@@ -28,6 +34,11 @@ defmodule JollaCNAPI.DB.Model.Post do
       :headerimg,
       :content_md,
       :content,
+      :tags,
+      :source_type,
+      :source_url,
+      :source_title,
+      :source_author,
       :visiable,
       :inserted_at,
       :updated_at
@@ -42,9 +53,9 @@ defmodule JollaCNAPI.DB.Model.Post do
       :author,
       :content_md,
       :content,
-      :visiable
-      # :inserted_at,
-      # :updated_at,
+      :visiable,
+      :inserted_at,
+      :updated_at
     ])
     |> unique_constraint(:slug, name: :post_pkey)
   end

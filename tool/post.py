@@ -74,6 +74,14 @@ print(html)
 # content
 # author
 
+original_tags = meta.get('tags', None)
+if original_tags is None:
+    tags = None
+else:
+    tags = [{
+        'guest': '嘉宾'
+    }[tag.lower()] for tag in original_tags]
+
 submit_args = {
     'slug': meta['slug'],
     'author': 'TylerTemp',
@@ -83,6 +91,11 @@ submit_args = {
     'description': description,
     'cover': meta.get('cover', None),
     'headerimg': meta.get('headerimg', None),
+    'source_author': meta.get('source_author', None),
+    'source_type': meta.get('source_type', None),
+    'source_url': meta.get('source_url', None),
+    'source_title': meta.get('source_title', None),
+    'tags': tags,
 }
 
 if args['new']:
