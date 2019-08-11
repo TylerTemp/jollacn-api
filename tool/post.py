@@ -79,7 +79,11 @@ if original_tags is None:
     tags = None
 else:
     tags = [{
-        'guest': '嘉宾'
+        'guest': '嘉宾',
+        'sailfish x': 'Sailfish X',
+        'software updates': '软件更新',
+        'sailfish os': 'Sailfish系统',
+        'sailfish 3': 'Sailfish 3',
     }[tag.lower()] for tag in original_tags]
 
 submit_args = {

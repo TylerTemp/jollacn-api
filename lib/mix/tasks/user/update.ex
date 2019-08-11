@@ -11,24 +11,27 @@ defmodule Mix.Tasks.User.Update do
         input_permissions
       end
 
-    result = JollaCNAPI.DB.Repo.transaction(fn ->
-      sql = "
+    result =
+      JollaCNAPI.DB.Repo.transaction(fn ->
+        sql = "
         UPDATE \"user\"
         SET permissions=$2
         WHERE name=$1
         RETURNING *
       "
-      args = [name, permissions]
+        args = [name, permissions]
 
-      user_updated = JollaCNAPI.DB.Repo
-        |> Ecto.Adapters.SQL.query!(sql, args)
-        |> JollaCNAPI.DB.Util.one()
+        user_updated =
+          JollaCNAPI.DB.Repo
+          |> Ecto.Adapters.SQL.query!(sql, args)
+          |> JollaCNAPI.DB.Util.one()
 
-      if user_updated == nil do
-        JollaCNAPI.DB.Repo.rollback("user not found")
-      end
-      user_updated
-    end)
+        if user_updated == nil do
+          JollaCNAPI.DB.Repo.rollback("user not found")
+        end
+
+        user_updated
+      end)
 
     IO.inspect(result)
   end

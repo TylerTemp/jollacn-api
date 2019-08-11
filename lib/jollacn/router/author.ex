@@ -14,7 +14,6 @@ defmodule JollaCNAPI.Router.Author do
   plug(:dispatch)
 
   get "/" do
-
     sql = "
       SELECT *
       FROM author
@@ -28,6 +27,7 @@ defmodule JollaCNAPI.Router.Author do
       |> JollaCNAPI.DB.Util.all(datetime: {"%F %T", :strftime})
 
     result = author_list
+
     conn
     |> put_resp_header("Content-Type", "application/json")
     |> send_resp(

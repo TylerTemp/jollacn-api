@@ -7,6 +7,8 @@ defmodule JollaCNAPI.DB.Model.Tie do
     field(:content_md, :string, null: false, comment: "内容(Markdown)")
     field(:content, :string, null: false, comment: "内容(Html)")
 
+    field(:title, :string, null: true, comment: "标题")
+
     field(
       :media_previews,
       JollaCNAPI.DB.Util.Type.JSON,
@@ -24,19 +26,18 @@ defmodule JollaCNAPI.DB.Model.Tie do
   end
 
   def changeset(struct, params \\ %{}) do
-    cast_fields = [
+    struct
+    |> cast(params, [
       :author,
       :content_md,
       :content,
+      :title,
       :media_previews,
       :medias,
       :visiable,
       :inserted_at,
       :updated_at
-    ]
-
-    struct
-    |> cast(params, cast_fields)
+    ])
     |> JollaCNAPI.DB.Util.add_timestamps(struct)
     |> validate_required([
       :author,
@@ -48,5 +49,6 @@ defmodule JollaCNAPI.DB.Model.Tie do
       # :inserted_at,
       # :updated_at,
     ])
+    |> unique_constraint(:title)
   end
 end

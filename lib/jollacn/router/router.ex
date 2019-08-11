@@ -17,7 +17,7 @@ defmodule JollaCNAPI.Router do
       %{method: :post, path: "tie", permission: %{must: ["new_tie"]}},
       %{method: :patch, path: "tie", permission: %{must: ["update_tie"]}},
       %{method: :post, path: "author", permission: %{must: ["new_author"]}},
-      %{method: :patch, path: "author", permission: %{must: ["update_author"]}},
+      %{method: :patch, path: "author", permission: %{must: ["update_author"]}}
     ]
   )
 

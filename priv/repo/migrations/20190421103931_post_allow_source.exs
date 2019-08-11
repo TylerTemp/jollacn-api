@@ -20,5 +20,4 @@ defmodule JollaCNAPI.DB.Repo.Migrations.PostAllowSource do
       add(:tags, {:array, :string}, null: true, comment: "标签")
     end
   end
-
 end

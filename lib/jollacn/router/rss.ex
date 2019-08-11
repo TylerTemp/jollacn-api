@@ -29,6 +29,7 @@ defmodule JollaCNAPI.Router.RSS do
         content,
         media_previews,
         -- medias,
+        title,
         inserted_at,
         updated_at
       FROM tie
@@ -45,6 +46,7 @@ defmodule JollaCNAPI.Router.RSS do
       |> JollaCNAPI.DB.Util.all()
       |> Enum.map(fn %{
                        "id" => id,
+                       "title" => title,
                        "author" => author,
                        "content" => content,
                        "media_previews" => media_previews,
@@ -53,7 +55,12 @@ defmodule JollaCNAPI.Router.RSS do
         # time_to_pub_date(inserted_at)
         %{
           "slug" => "/tie/#{id}",
-          "title" => escape_html("快讯(#{id})"),
+          "title" =>
+            if title do
+              "快讯：#{title}"
+            else
+              escape_html("快讯(#{id})")
+            end,
           "author" => escape_html(author),
           "pub_date" => time_to_pub_date(inserted_at),
           # "pub_date" => "pub_date",
