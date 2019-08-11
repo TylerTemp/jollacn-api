@@ -59,7 +59,7 @@ defmodule JollaCNAPI.MixProject do
       {:comeonin, "~> 4.0"},
       {:argon2_elixir, "~> 1.2"},
       {:logger_file_backend, git: "https://github.com/TylerTemp/logger_file_backend.git"},
-      {:distillery, "~> 1.5", runtime: false}
+      {:distillery, "~> 2.1", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
     ]

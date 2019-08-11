@@ -31,3 +31,9 @@ config/prod.exs
 *.py[c|o]
 __pycache__/
 /tool/account.json
+
+/release/*
+!/release/.placeholder
+
+/rel/*
+!/rel/.placeholder
