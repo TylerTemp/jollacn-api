@@ -1,6 +1,6 @@
 """
 Usage:
-    post.py [options] [new|update] <folder>
+    post.py [options] <meta>...
 
 Options:
     -n <str>, --name=<str>       user name
@@ -18,6 +18,11 @@ import json
 import os
 import requests
 import docpie
+
+try:
+    from urllib.parse import quote
+except ImportError:
+    from urllib import quote
 
 from md import jolla_md_to_html
 from jwt_login import LoginReq
@@ -45,19 +50,18 @@ else:
 
 login_req = LoginReq(user, pwd, host)
 
-folder = args['<folder>']
+for filename in args['<meta>']:
+    with open(filename, 'r', encoding='utf-8') as f:
+        meta = json.load(f)
 
-with open(os.path.join(folder, 'meta.json'), 'r', encoding='utf-8') as f:
-    meta = json.load(f)
+    print(meta)
+    meta_no_name = dict(meta)
+    name = meta_no_name.pop('name')
 
-print(meta)
+    resp = login_req.patch('{}/author/{}'.format(host, quote(name)), json=meta_no_name)
+    if resp.status_code == 404:
+        resp = login_req.post(host + '/author', json=meta)
 
-if args['new']:
-    resp = login_req.post(host + '/author', json=meta)
-else:
-    name = meta.pop('name')
-    resp = login_req.patch('{}/author/{}'.format(host, name), json=meta)
-
-print(resp.text)
-print(resp.status_code)
-print(resp.json())
+    print(resp.text)
+    print(resp.status_code)
+    print(resp.json())

@@ -143,7 +143,11 @@ defmodule JollaCNAPI.Router.Post do
         source_type,
         source_url,
         source_title,
-        source_author,
+        (CASE
+          WHEN array_length(source_authors, 1) IS NULL THEN NULL
+          ELSE source_authors[1]
+        END) AS source_author,
+        source_authors,
         to_char(inserted_at, 'YYYY-MM-DD HH24:MI:SS') AS inserted_at,
         to_char(updated_at, 'YYYY-MM-DD HH24:MI:SS') AS updated_at
       FROM post

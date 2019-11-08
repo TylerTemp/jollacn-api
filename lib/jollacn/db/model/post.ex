@@ -16,7 +16,8 @@ defmodule JollaCNAPI.DB.Model.Post do
     field(:source_type, :string, null: true, comment: "null: 未知；translation：翻译；original: 原创")
     field(:source_url, :string, null: true, comment: "原文url")
     field(:source_title, :string, null: true, comment: "原文标题")
-    field(:source_author, :string, null: true, comment: "原文作者")
+    # field(:source_author, :string, null: true, comment: "原文作者")
+    field(:source_authors, {:array, :string}, null: false, default: [], comment: "原文作者")
 
     field(:visiable, :boolean, null: false, default: true, comment: "可见")
 
@@ -38,7 +39,8 @@ defmodule JollaCNAPI.DB.Model.Post do
       :source_type,
       :source_url,
       :source_title,
-      :source_author,
+      # :source_author,
+      :source_authors,
       :visiable,
       :inserted_at,
       :updated_at
@@ -53,6 +55,7 @@ defmodule JollaCNAPI.DB.Model.Post do
       :author,
       :content_md,
       :content,
+      :source_authors,
       :visiable,
       :inserted_at,
       :updated_at

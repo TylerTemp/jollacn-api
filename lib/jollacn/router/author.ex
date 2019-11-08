@@ -134,7 +134,7 @@ defmodule JollaCNAPI.Router.Author do
         conn
         |> put_resp_header("Content-Type", "application/json")
         |> send_resp(
-          500,
+          404,
           :jiffy.encode(%{"message" => "author #{name} not found"}, [
             :use_nil
           ])
