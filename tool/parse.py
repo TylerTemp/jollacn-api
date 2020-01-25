@@ -10,8 +10,8 @@ import requests
 import socks
 import socket
 import html2text
-socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 1080)
-socket.socket = socks.socksocket
+#socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, "127.0.0.1", 1080)
+#socket.socket = socks.socksocket
 
 try:
     from urllib.request import urlretrieve
@@ -113,8 +113,8 @@ def parse_jolla(url):
     }.get(author_display_name, author_display_name)
     logger.debug(author_name)
 
-    author_name_node = profile_node.find(None, {'class': 'author-name'})
-    description_node = author_name_node.find_next('p')
+    # author_name_node = profile_node.find(None, {'class': 'author-name'})
+    description_node = author_node.parent.find_next_sibling('p')
     for img in description_node.find_all('img'):
         alt = img.get('alt')
         if alt:
@@ -127,6 +127,14 @@ def parse_jolla(url):
         'avatar': author_avatar,
         'description': description,
     }
+    result['source_authors'] = [
+        {
+            'name': author_name,
+            'display_name': author_display_name,
+            'avatar': author_avatar,
+            'description': description,
+        }
+    ]
 
     blog = soup.find(None, {'class': 'blog-wrap'})
     title = blog.find('h1').text.strip()
