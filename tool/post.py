@@ -154,9 +154,14 @@ else:
         'software updates': '软件更新',
         'sailfish os': 'Sailfish系统',
         'sailfish 3': 'Sailfish 3',
+        'sailfish 4': 'Sailfish 4',
         'sony xperia': 'Sony Xperia',
         'development': '开发',
         'jolla blog': 'Jolla博客',
+        'jolla story': 'Jolla故事',
+        'news': '新闻',
+        'community': '社区',
+        'strategy': '策略',
     }[tag.lower()] for tag in original_tags]
 
 submit_args = {

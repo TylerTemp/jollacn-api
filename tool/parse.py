@@ -96,7 +96,7 @@ def parse_jolla(url):
     profile_node = soup.find(None, {'class': 'profile-section'})
     author_node = profile_node.find('strong')
     if author_node is None:
-        author_node = profile_node.find(None, {'class': 'author-name'})
+        author_node = profile_node.find('h3', {'class': 'author-name'})
 
     author_display_name = author_node.text.strip()
     author_img = profile_node.find('img', src=True)
@@ -114,8 +114,8 @@ def parse_jolla(url):
     logger.debug(author_name)
 
     # author_name_node = profile_node.find(None, {'class': 'author-name'})
-    description_node = author_node.parent.find_next_sibling('p')
-    for img in description_node.find_all('img'):
+    description_node = author_node.find_next_sibling('p')
+    for img in description_node.find_all('img'):  # emoji img
         alt = img.get('alt')
         if alt:
             img.replace_with(alt)
