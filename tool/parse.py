@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Usage:
     parse <url> [<save-dir>]
@@ -199,6 +200,7 @@ def save(dic, folder):
         'source_title': dic['title'],
         'source_author_info': dic['author'],
         'source_author': dic['author']['name'],
+        'source_authors': [dic['author']['name']],
         'source_type': 'translation',
         'source_url': dic['url'],
         'tags': dic['tags'],
@@ -259,7 +261,7 @@ def save(dic, folder):
         logger.info(_fname)
 
     with open(os.path.join(folder, 'author', 'meta.json'), 'w', encoding='utf-8') as f:
-        print(author_meta)
+        # print(author_meta)
         json.dump(author_meta, f, indent=2, ensure_ascii=False)
     with open(os.path.join(folder, 'meta.json'), 'w', encoding='utf-8') as f:
         json.dump(meta, f, indent=2, ensure_ascii=False)

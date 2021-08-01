@@ -1,0 +1,9 @@
+qiniu
+
+markdown==2.6.11
+bleach
+git+git://github.com/TylerTemp/amazedown.git
+git+git://github.com/TylerTemp/md-underline.git
+git+git://github.com/TylerTemp/md-video.git
+git+git://github.com/TylerTemp/md-nlcontinuous.git
+git+git://github.com/aleray/mdx_del_ins.git

@@ -16,6 +16,7 @@ Options:
 
 import json
 import os
+import sys
 import itertools
 
 import requests
@@ -27,6 +28,8 @@ from jwt_login import LoginReq
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 args = docpie.docpie(__doc__, appearedonly=True, help=False)
 host = args.get('--host', 'https://notexists.top') + '/api'
@@ -162,6 +165,9 @@ else:
         'news': '新闻',
         'community': '社区',
         'strategy': '策略',
+        'app support': '应用支持',
+        'hardware': '硬件',
+        'jolla smartphone': 'Jolla 智能手机'
     }[tag.lower()] for tag in original_tags]
 
 submit_args = {
