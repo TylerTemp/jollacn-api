@@ -167,7 +167,10 @@ else:
         'strategy': '策略',
         'app support': '应用支持',
         'hardware': '硬件',
-        'jolla smartphone': 'Jolla 智能手机'
+        'jolla smartphone': 'Jolla 智能手机',
+        'developer stories': '开发者故事',
+        'open source': '开源',
+        'together.jolla.com': 'together.jolla.com'
     }[tag.lower()] for tag in original_tags]
 
 submit_args = {

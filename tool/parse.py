@@ -116,6 +116,8 @@ def parse_jolla(url):
 
     # author_name_node = profile_node.find(None, {'class': 'author-name'})
     description_node = author_node.find_next_sibling('p')
+    if description_node is None:
+        description_node = author_node.parent.find_next_sibling('p')
     for img in description_node.find_all('img'):  # emoji img
         alt = img.get('alt')
         if alt:

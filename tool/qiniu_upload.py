@@ -12,6 +12,9 @@ Options:
 import qiniu
 import qiniu.config
 import logging
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 logger = logging.getLogger('upload')
 
@@ -98,7 +101,7 @@ if __name__ == '__main__':
             key = upload(f.read(), name, bucket)
             logger.info(key)
         if bucket == 'jolla':
-            finished.append('https://dn-jolla.qbox.me/%s' % key)
+            finished.append('https://q-jolla.notexists.top/%s' % key)
             logger.info(finished[-1])
 
     for link in finished:

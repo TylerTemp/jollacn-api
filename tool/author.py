@@ -18,6 +18,7 @@ import json
 import os
 import requests
 import docpie
+import sys
 
 try:
     from urllib.parse import quote
@@ -26,6 +27,8 @@ except ImportError:
 
 from md import jolla_md_to_html
 from jwt_login import LoginReq
+
+sys.stdout.reconfigure(encoding='utf-8')
 
 # import logging
 # logging.basicConfig(level=logging.DEBUG)
