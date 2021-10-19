@@ -42,12 +42,12 @@ defmodule JollaCNAPI.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"},
-      {:ecto_sql, "~> 3.0-pre"},
-      {:postgrex, ">= 0.0.0-pre"},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
       {:db_connection, "~> 2.0-pre"},
       {:jason, "~> 1.1"},
       # {:httpoison, "~> 1.0"},
-      {:jiffy, "~> 0.14.11"},
+      {:jiffy, "~> 1.0"},
       # {:hackney, path: "deps/hackney", override: true},
       # {:quantum, ">= 2.2.1"},
       {:timex, "~> 3.0"},

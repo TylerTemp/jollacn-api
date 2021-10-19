@@ -141,6 +141,8 @@ html = soup.body.encode_contents().decode('utf-8')
 print(content_md)
 print(html)
 
+exit()
+
 # title
 # headerimg
 # description
@@ -170,7 +172,8 @@ else:
         'jolla smartphone': 'Jolla 智能手机',
         'developer stories': '开发者故事',
         'open source': '开源',
-        'together.jolla.com': 'together.jolla.com'
+        'together.jolla.com': 'together.jolla.com',
+        'applications': '应用',
     }[tag.lower()] for tag in original_tags]
 
 submit_args = {

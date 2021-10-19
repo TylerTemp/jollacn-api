@@ -1,5 +1,18 @@
 # JollaCNAPI
 
+## 准备 ##
+
+创建对应postgres用户
+
+```bash
+sudo -u postgres createuser --superuser jollacn_api
+sudo -u postgres psql -c '\password jollacn_api'
+ export PGPASSWORD="jollacn_api"
+psql -W --no-password -h 127.0.0.1 -U jollacn_api template1 -c 'CREATE DATABASE jollacn_api'
+# psql -W --no-password -h 127.0.0.1 -U fuse_api fuse_api -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+export PGPASSWORD=''
+```
+
 ## 发布流程 ##
 
 ```bash

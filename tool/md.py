@@ -6,11 +6,11 @@ import markdown
 # import markdown_newtab
 import nlcontinuous
 import md_video
-import underline
+# import underline
 # from ..markdown_gridtables import mdx_grid_tables
-from amazedown_patched import \
-    link_icon_tab, link_image_block, image_block, \
-    list_gallery, list_avg_gallery, quote_by
+# from amazedown_patched import \
+#     link_icon_tab, link_image_block, image_block, \
+#     list_gallery, list_avg_gallery, quote_by
 
 logger = logging.getLogger('MARKDOWN')
 logger.setLevel(logging.CRITICAL)
@@ -18,8 +18,8 @@ logger.setLevel(logging.CRITICAL)
 # __all__ = ['md2html', 'html2md', 'escape']
 
 extend = [
-    nlcontinuous.makeExtension(),
-    md_video.makeExtension(crossorigin="anonymous"),
+    # nlcontinuous.makeExtension(),
+    # md_video.makeExtension(crossorigin="anonymous"),
     # define attributes, {: #someid .someclass somekey='some value' }
     # 'markdown.extensions.attr_list',
     # use fenced code block by 3 back quotes
@@ -32,7 +32,7 @@ extend = [
     # code highlight, and <pre><code></code></pre> added
     'markdown.extensions.codehilite',
     # ++text++ for <ins>text</ins> and ~~text~~ for <del>text</del>
-    'del_ins',
+    # 'del_ins',
     # add '_blank' for links
     # markdown_newtab.makeExtension(),
     # table extend
@@ -110,7 +110,7 @@ def jolla_md_to_html(md):
                 # code highlight, and <pre><code></code></pre> added
                 'markdown.extensions.codehilite',
                 # ++text++ for <ins>text</ins> and ~~text~~ for <del>text</del>
-                'del_ins',
+                # 'del_ins',
                 # add '_blank' for links
                 # markdown_newtab.makeExtension(),
                 # table extend
@@ -126,13 +126,13 @@ def jolla_md_to_html(md):
                 # !!! danger
                 #     some text
                 # 'markdown.extensions.admonition'
-                underline.makeExtension(tag='strong', cls='underline'),
+                # underline.makeExtension(tag='strong', cls='underline'),
                 # image_block.makeExtension(),
                 # link_image_block.makeExtension(),
                 # link_icon_tab.makeExtension(host='notexists.top'),
                 # list_gallery.makeExtension(),
                 # list_avg_gallery.makeExtension(),
-                quote_by.makeExtension(),
+                # quote_by.makeExtension(),
             ])
 
 if __name__ == '__main__':

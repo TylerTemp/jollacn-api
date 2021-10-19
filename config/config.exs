@@ -9,8 +9,8 @@ config :jollacn_api, ecto_repos: [JollaCNAPI.DB.Repo]
 config :jollacn_api, JollaCNAPI.DB.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "jollacn_api",
-  username: "postgres",
-  password: "postgres",
+  username: "jollacn_api",
+  password: "jollacn_api",
   hostname: "localhost",
   port: "5432",
   log: :info

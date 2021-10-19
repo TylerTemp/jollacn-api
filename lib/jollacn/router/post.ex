@@ -257,6 +257,8 @@ defmodule JollaCNAPI.Router.Post do
 
     sql = "
       SELECT
+        COUNT(*) OVER() AS total_count,
+        id,
         post_slug,
         nickname,
         ip,
@@ -287,19 +289,13 @@ defmodule JollaCNAPI.Router.Post do
         |> Map.drop(["ip", "email"])
       end)
 
-    count_sql = "
-      SELECT
-        COUNT(1) AS count
-      FROM post_comment
-      WHERE visiable = TRUE
-        AND post_slug = $1
-    "
-    count_args = [post_slug]
-
-    %{"count" => count} =
-      JollaCNAPI.DB.Repo
-      |> Ecto.Adapters.SQL.query!(count_sql, count_args)
-      |> JollaCNAPI.DB.Util.one()
+    count =
+      if length(post_comment_list) == 0 do
+        0
+      else
+        [%{"total_count" => total_count} | _] = post_comment_list
+        total_count
+      end
 
     result = %{
       "total" => count,
