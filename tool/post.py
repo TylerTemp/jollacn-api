@@ -32,9 +32,12 @@ from jwt_login import LoginReq
 sys.stdout.reconfigure(encoding='utf-8')
 
 args = docpie.docpie(__doc__, appearedonly=True, help=False)
-host = args.get('--host', 'https://notexists.top') + '/api'
-if not host.startswith('http'):
-    host = 'http://' + host
+if '--host' in args:
+    host = args['--host']
+    if not host.startswith('http'):
+        host = 'http://' + host
+else:
+    host = args.get('--host', 'https://notexists.top') + '/api'
 
 print('get host {}'.format(host))
 user = args.get('--user', None)

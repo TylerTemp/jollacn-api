@@ -38,7 +38,8 @@ defmodule JollaCNAPI.Router.User do
         )
 
       %{"password_encrypted" => password_encrypted} ->
-        if Comeonin.Argon2.checkpw(password, password_encrypted) do
+        # if Comeonin.Argon2.checkpw(password, password_encrypted) do
+        if Argon2.check_pass(password, password_encrypted) do
           now = Timex.now()
           iat = Timex.to_unix(now)
 
@@ -103,8 +104,8 @@ defmodule JollaCNAPI.Router.User do
       end)
 
     sign =
-      :sha256
-      |> :crypto.hmac(secret, "#{b64_header}.#{b64_payload}")
+      :hmac
+      |> :crypto.mac(:sha256, secret, "#{b64_header}.#{b64_payload}")
       |> Base.encode16()
 
     "#{b64_header}.#{b64_payload}.#{sign}"

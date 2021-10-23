@@ -56,8 +56,8 @@ defmodule JollaCNAPI.MixProject do
       {:egd, github: "erlang/egd"},
       {:calendar, "~> 0.17.4"},
       {:html_entities, "~> 0.4"},
-      {:comeonin, "~> 4.0"},
-      {:argon2_elixir, "~> 1.2"},
+      # {:comeonin, "~> 4.0"},
+      {:argon2_elixir, "~> 2.0"},
       {:logger_file_backend, git: "https://github.com/TylerTemp/logger_file_backend.git"},
       {:distillery, "~> 2.1", runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},

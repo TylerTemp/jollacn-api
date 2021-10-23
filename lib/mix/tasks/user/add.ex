@@ -24,7 +24,7 @@ defmodule Mix.Tasks.User.Add do
     changes =
       user
       |> Map.delete("password")
-      |> Map.put("password_encrypted", Comeonin.Argon2.hashpwsalt(password))
+      |> Map.put("password_encrypted", Argon2.add_hash(password))
 
     %JollaCNAPI.DB.Model.User{}
     |> JollaCNAPI.DB.Model.User.changeset(changes)

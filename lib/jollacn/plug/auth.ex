@@ -33,8 +33,8 @@ defmodule JollaCNAPI.Plug.Auth do
                 secret = Application.fetch_env!(:jollacn_api, :jwt_secret)
 
                 check_sign =
-                  :sha256
-                  |> :crypto.hmac(secret, "#{b64_header}.#{b64_payload}")
+                  :hmac
+                  |> :crypto.mac(:sha256, secret, "#{b64_header}.#{b64_payload}")
                   |> Base.encode16()
 
                 if check_sign != sign do
