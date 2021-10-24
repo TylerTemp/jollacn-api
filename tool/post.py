@@ -75,7 +75,7 @@ with open(os.path.join(folder, 'translate.md'), 'r', encoding='utf-8') as f:
 html = jolla_md_to_html(content_md)
 soup = BeautifulSoup(html, 'html5lib')
 
-
+# level 1 plug
 for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
     # print(comment)
     # so far deal with table only
@@ -119,23 +119,98 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
     if ' END table' in comment:
         comment.extract()
 
-    # if ' START hard_style' in comment:
-    #     config = json.loads(comment.split('=', 1)[-1])
-    #
-    #     child_collect = []
-    #     replace_node = None
-    #     print(comment)
-    #
-    #     while True:
-    #         next_node = comment.next_sibling
-    #         print(next_node)
-    #         if isinstance(next_node, Comment) and ' END hard_style' in next_node:
-    #             replace_node = next_node
-    #             break
-    #         child_collect.append(next_node)
-    #     comment.extract()
-    #     div_wrapper = soup.new_tag('div')
-    #     replace_node.replace_with(div_wrapper)
+    if 'START figure' in comment:
+        config_raw_str = comment.split('START figure')[-1].strip()
+        config_figure = {'title': None, 'enlarge': 'link'}
+        if config_raw_str:
+            config_figure.update(json.loads(config_raw_str))
+
+        print(config_figure)
+
+        figure_container = comment.find_next('p')
+        print(figure_container)
+        # exit()
+        img_raw_node = figure_container.find('img')
+        img_src = img_raw_node.get('src')
+        assert img_src
+        print(img_src)
+
+        figure_node = soup.new_tag('figure', **{'class': 'plugin plugin-figure'})
+        # figure_node.append(soup.new_tag('img', src=img_src))
+        # print(figure_node)
+        img_node = soup.new_tag('img', src=img_src, **{'class': 'plugin plugin-figure plugin-figure-img'})
+
+        if config_figure['enlarge']:
+            assert config_figure['enlarge'] == 'link'
+            a_raw_node = figure_container.find('a')
+            a_href = a_raw_node.get('href')
+            assert a_href
+            print(a_href)
+            a_node = soup.new_tag('a', href=a_href, target='_blank', **{'class': 'plugin plugin-figure plugin-figure-enlarge'})
+            a_node.append(img_node)
+
+            a_raw_node.extract()
+
+            figure_node.append(a_node)
+        else:
+            img_raw_node.extract()
+            figure_node.append(img_node)
+
+        if config_figure['title']:
+            assert config_figure['title'] == 'h6'
+            h6_raw_node = comment.find_next('h6')
+            fig_caption = soup.new_tag('figcaption', class_='plugin plugin-figure plugin-figure-figcaption')
+            for h6_child_raw_node in h6_raw_node.children:
+                fig_caption.append(h6_child_raw_node)
+
+            h6_raw_node.extract()
+            figure_node.append(fig_caption)
+
+        print(figure_node)
+        figure_container.replace_with(figure_node)
+        comment.extract()
+
+    if 'END figure' in comment:
+        comment.extract()
+
+# level 2 plug
+image_list = []
+config_image_list = {}
+in_image_list = False
+for first_level_node in soup.find('body').children:
+    is_comment = isinstance(first_level_node, Comment)
+    # print(first_level_node)
+    if is_comment:
+        print(first_level_node)
+
+    if is_comment and 'START image_list' in first_level_node:
+        in_image_list = True
+        image_list.clear()
+
+        config_raw_str = first_level_node.split('START image_list')[-1].strip()
+        config_image_list = {'sm': 1, 'md': 2, 'lg': 3}
+        if config_raw_str:
+            config_image_list.update(json.loads(config_raw_str))
+
+        print(config_figure)
+        first_level_node.extract()
+        continue
+
+    if is_comment and 'END image_list' in first_level_node:
+        assert in_image_list
+        in_image_list = False
+        # process image list
+        print('image list', image_list)
+        image_list_node = soup.new_tag('div', **{'class': 'plugin plugin-image-list', 'data-config': json.dumps(config_image_list)})
+        for image_node in image_list:
+            image_list_node.append(image_node)
+        first_level_node.replace_with(image_list_node)
+        # first_level_node.extract()
+        # exit()
+        continue
+
+    if in_image_list and first_level_node.name == 'figure':
+        image_list.append(first_level_node)
 
 html = soup.body.encode_contents().decode('utf-8')
 
@@ -144,7 +219,7 @@ html = soup.body.encode_contents().decode('utf-8')
 print(content_md)
 print(html)
 
-exit()
+# exit()
 
 # title
 # headerimg
