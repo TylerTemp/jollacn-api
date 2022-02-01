@@ -190,7 +190,7 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
         center_node = soup.new_tag('center', **{'class': 'plugin plugin-button plugin-button-center'})
         # figure_node.append(soup.new_tag('img', src=img_src))
         # print(figure_node)
-        link_new_node = soup.new_tag('a', href=link_href, **{'class': 'plugin plugin-button plugin-button-a'})
+        link_new_node = soup.new_tag('a', href=link_href, target='_blank', **{'class': 'plugin plugin-button plugin-button-a'})
         button_node = soup.new_tag('button', **{'class': 'plugin plugin-button plugin-button-button'})
         button_node.append(soup.new_string(link_text))
 
