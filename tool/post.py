@@ -188,7 +188,7 @@ for first_level_node in soup.find('body').children:
         image_list.clear()
 
         config_raw_str = first_level_node.split('START image_list')[-1].strip()
-        config_image_list = {'sm': 1, 'md': 2, 'lg': 3}
+        config_image_list = {'sm': 1, 'md': 3, 'lg': 4}
         if config_raw_str:
             config_image_list.update(json.loads(config_raw_str))
 

@@ -122,7 +122,11 @@ def parse_jolla(url):
         description_node = author_node.parent.find_next_sibling('p')
     if description_node is None:
         profile_section = soup.find('div', class_='profile-section')
-        description = list(profile_section.find_all('p', style='padding-left: 30px;'))[-1]
+        description_list_array = list(profile_section.find_all('p', style='padding-left: 30px;'))
+        if description_list_array:
+            description_node = description_list_array[-1]
+    if description_node is None:
+        description_node = list(profile_section.find_all('p'))[-1]
 
     assert description_node
     for img in description_node.find_all('img'):  # emoji img

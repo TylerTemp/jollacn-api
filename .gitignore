@@ -39,3 +39,4 @@ __pycache__/
 !/rel/.placeholder
 
 .idea/
+.elixir_ls/

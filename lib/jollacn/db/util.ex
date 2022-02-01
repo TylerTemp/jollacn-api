@@ -28,6 +28,10 @@ defmodule JollaCNAPI.DB.Util.Type.JSON do
     # IO.puts("dump #{inspect value} to #{inspect result}")
     {:ok, result}
   end
+
+  def equal?(nil, %{}) do
+    false
+  end
 end
 
 defmodule JollaCNAPI.DB.Util do
