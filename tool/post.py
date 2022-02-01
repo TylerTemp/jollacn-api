@@ -173,6 +173,42 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
     if 'END figure' in comment:
         comment.extract()
 
+    if 'START button' in comment:
+        config_raw_str = comment.split('START button')[-1].strip()
+        config_button = {'center': True}
+        if config_raw_str:
+            config_button.update(json.loads(config_raw_str))
+
+        print(config_button)
+
+        link_node = comment.find_next('a')
+        print(link_node)
+        link_text = link_node.text.strip()
+        link_href = link_node.get('href')
+
+
+        center_node = soup.new_tag('center', **{'class': 'plugin plugin-button plugin-button-center'})
+        # figure_node.append(soup.new_tag('img', src=img_src))
+        # print(figure_node)
+        link_new_node = soup.new_tag('a', href=link_href, **{'class': 'plugin plugin-button plugin-button-a'})
+        button_node = soup.new_tag('button', **{'class': 'plugin plugin-button plugin-button-button'})
+        button_node.append(soup.new_string(link_text))
+
+        link_new_node.append(button_node)
+
+        if config_button['center']:
+            main_node = center_node
+            main_node.append(link_new_node)
+        else:
+            main_node = link_new_node
+
+        print(main_node)
+        link_node.replace_with(main_node)
+        comment.extract()
+
+    if 'END button' in comment:
+        comment.extract()
+
 # level 2 plug
 image_list = []
 config_image_list = {}

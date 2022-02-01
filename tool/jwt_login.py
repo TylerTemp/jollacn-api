@@ -12,11 +12,14 @@ def login(name, password, host=None):
         host = 'https://notexists.top/api'
     if not host.startswith('http'):
         host = 'http://' + host
+
     url = host + '/user/login'
     args = {
         'name': name,
         'password': password,
     }
+
+    print(f'{url} {name} {password}')
 
     resp = requests.post(url, json=args)
     print(resp.status_code)
