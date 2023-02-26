@@ -98,6 +98,8 @@ def parse_jolla(url):
     author_node = profile_node.find('h3', {'class': 'author-name'})
     if author_node is None:
         author_node = profile_node.find('strong')
+    if author_node is None:
+        author_node = profile_node.find('h3', text=lambda t: t != '')
     assert author_node
 
     author_display_name = author_node.text.strip()
