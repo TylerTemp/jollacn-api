@@ -40,10 +40,10 @@ else:
     host = args.get('--host', 'https://notexists.top') + '/api'
 
 print('get host {}'.format(host))
-user = args.get('--user', None)
+user = args.get('--name', None)
 if user:
     print('get user from input')
-    pwd = args['--pwd']
+    pwd = args['--password']
 else:
     print('get user from account.json')
     with open(os.path.normpath(os.path.join(__file__, '..', 'account.json')), 'r', encoding='utf-8') as f:
