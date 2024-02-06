@@ -132,8 +132,8 @@ defmodule JollaCNAPI.DB.Util do
   end
 
   def decimal_formatter(decimal, {:string, precision}) do
-    Decimal.with_context(%Decimal.Context{precision: precision}, fn ->
-      decimal |> Decimal.plus() |> Decimal.to_string(:normal)
+    Decimal.Context.with(%Decimal.Context{precision: precision}, fn ->
+      decimal |> Decimal.apply_context() |> Decimal.to_string(:normal)
     end)
   end
 
