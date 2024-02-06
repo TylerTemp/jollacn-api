@@ -1,39 +1,3 @@
-defmodule JollaCNAPI.DB.Util.Type.JSON do
-  @behaviour Ecto.Type
-
-  def type, do: :json
-
-  def cast(any), do: {:ok, any}
-
-  # def load(value) do
-  #   IO.puts("try load #{inspect value}")
-  #   result = :jiffy.decode(value, [:use_nil, :return_maps])
-  #   IO.puts("load #{inspect value} to #{inspect result}")
-  #   {:ok, result}
-  # end
-
-  def load(value) do
-    # IO.puts("try load #{inspect value}")
-    # result = :jiffy.decode(value, [:use_nil, :return_maps])
-    result = value
-    # IO.puts("load #{inspect value} to #{inspect result}")
-    {:ok, result}
-  end
-
-  def dump(value) do
-    # IO.puts("try dump #{inspect value}")
-    # result = :jiffy.encode(value, [:use_nil, :return_maps])
-    result = value
-    # result = value
-    # IO.puts("dump #{inspect value} to #{inspect result}")
-    {:ok, result}
-  end
-
-  def equal?(nil, %{}) do
-    false
-  end
-end
-
 defmodule JollaCNAPI.DB.Util do
   require Logger
 

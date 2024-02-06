@@ -43,6 +43,7 @@ defmodule JollaCNAPI.MixProject do
     [
       {:plug_cowboy, "~> 2.0"},
       {:ecto_sql, "~> 3.0"},
+      {:ecto_json, "~> 0.1.0"},
       {:postgrex, ">= 0.0.0"},
       #{:db_connection, "~> 2.0-pre"},
       {:jason, "~> 1.4"},

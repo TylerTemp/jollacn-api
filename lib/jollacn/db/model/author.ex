@@ -5,7 +5,7 @@ defmodule JollaCNAPI.DB.Model.Author do
   @primary_key {:name, :string, []}
   schema "author" do
     field(:display_name, :string)
-    field(:avatar, JollaCNAPI.DB.Util.Type.JSON, default: [])
+    field(:avatar, Ecto.JSON, default: [])
     field(:description, :string)
 
     field(:inserted_at, :naive_datetime)
