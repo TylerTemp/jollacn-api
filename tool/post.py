@@ -51,7 +51,6 @@ else:
     user = account['username']
     pwd = account['password']
 
-
 login_req = LoginReq(user, pwd, host)
 
 folder = args['<folder>']
@@ -74,6 +73,9 @@ with open(os.path.join(folder, 'translate.md'), 'r', encoding='utf-8') as f:
 
 html = jolla_md_to_html(content_md)
 soup = BeautifulSoup(html, 'html5lib')
+print(soup.prettify())
+# with open('temp.html', 'w', encoding='utf-8') as f:
+#     f.write(soup.prettify())
 
 # level 1 plug
 for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
@@ -120,6 +122,7 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
         comment.extract()
 
     if 'START figure' in comment:
+        print(comment)
         config_raw_str = comment.split('START figure')[-1].strip()
         config_figure = {'title': None, 'enlarge': 'link'}
         if config_raw_str:
@@ -146,7 +149,8 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
             a_href = a_raw_node.get('href')
             assert a_href
             print(a_href)
-            a_node = soup.new_tag('a', href=a_href, target='_blank', **{'class': 'plugin plugin-figure plugin-figure-enlarge'})
+            a_node = soup.new_tag('a', href=a_href, target='_blank',
+                                  **{'class': 'plugin plugin-figure plugin-figure-enlarge'})
             a_node.append(img_node)
 
             a_raw_node.extract()
@@ -157,8 +161,9 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
             figure_node.append(img_node)
 
         if config_figure['title']:
-            assert config_figure['title'] == 'h6'
-            h6_raw_node = comment.find_next('h6')
+            # assert config_figure['title'] == 'h6'
+            h6_raw_node = comment.find_next(config_figure['title'])
+            assert h6_raw_node, img_src
             fig_caption = soup.new_tag('figcaption', class_='plugin plugin-figure plugin-figure-figcaption')
             for h6_child_raw_node in h6_raw_node.children:
                 fig_caption.append(h6_child_raw_node)
@@ -186,11 +191,11 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
         link_text = link_node.text.strip()
         link_href = link_node.get('href')
 
-
         center_node = soup.new_tag('center', **{'class': 'plugin plugin-button plugin-button-center'})
         # figure_node.append(soup.new_tag('img', src=img_src))
         # print(figure_node)
-        link_new_node = soup.new_tag('a', href=link_href, target='_blank', **{'class': 'plugin plugin-button plugin-button-a'})
+        link_new_node = soup.new_tag('a', href=link_href, target='_blank',
+                                     **{'class': 'plugin plugin-button plugin-button-a'})
         button_node = soup.new_tag('button', **{'class': 'plugin plugin-button plugin-button-button'})
         button_node.append(soup.new_string(link_text))
 
@@ -207,6 +212,39 @@ for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
         comment.extract()
 
     if 'END button' in comment:
+        comment.extract()
+
+    if 'START blockquote' in comment:
+        # config_raw_str = comment.split('START button')[-1].strip()
+        # config_button = {'center': True}
+        # if config_raw_str:
+        #     config_button.update(json.loads(config_raw_str))
+        #
+        # print(config_button)
+
+        blockquote_node = comment.find_next('blockquote')
+        print(blockquote_node)
+        author_node = None
+        for p_node in blockquote_node.find_all('p'):
+            text = p_node.text.strip()
+            if text.startswith('--'):
+                author_node = p_node
+                break
+
+        if author_node:
+            author_text = author_node.text.strip()[len('--'):].strip()
+            author_node.extract()
+            figure_node = soup.new_tag('figure', **{'class': 'plugin plugin-blockquote plugin-blockquote-figure'})
+            blockquote_node['class'] = 'plugin plugin-blockquote plugin-blockquote-blockquote'
+            blockquote_node.wrap(figure_node)
+            figcaption_node = soup.new_tag('figcaption',
+                                           **{'class': 'plugin plugin-blockquote plugin-blockquote-figcaption'})
+            figcaption_node.append(soup.new_string(author_text))
+            figure_node.append(figcaption_node)
+
+        comment.extract()
+
+    if 'END blockquote' in comment:
         comment.extract()
 
 # level 2 plug
@@ -228,7 +266,7 @@ for first_level_node in soup.find('body').children:
         if config_raw_str:
             config_image_list.update(json.loads(config_raw_str))
 
-        print(config_figure)
+        print(config_image_list)
         first_level_node.extract()
         continue
 
@@ -236,8 +274,12 @@ for first_level_node in soup.find('body').children:
         assert in_image_list
         in_image_list = False
         # process image list
-        print('image list', image_list)
-        image_list_node = soup.new_tag('div', **{'class': 'plugin plugin-image-list', 'data-config': json.dumps(config_image_list)})
+        print('image list', image_list, config_image_list)
+        image_list_node = soup.new_tag(
+            'div', **{
+                'class': 'plugin plugin-image-list' +
+                         ' '.join(f'plugin-image-list-{key}-{value}' for key, value in config_image_list.items()),
+                'data-config': json.dumps(config_image_list)})
         for image_node in image_list:
             image_list_node.append(image_node)
         first_level_node.replace_with(image_list_node)
@@ -268,27 +310,30 @@ if original_tags is None:
     tags = None
 else:
     tags = [{
-        'guest': '嘉宾',
-        'sailfish x': 'Sailfish X',
-        'software updates': '软件更新',
-        'sailfish os': 'Sailfish系统',
-        'sailfish 3': 'Sailfish 3',
-        'sailfish 4': 'Sailfish 4',
-        'sony xperia': 'Sony Xperia',
-        'development': '开发',
-        'jolla blog': 'Jolla博客',
-        'jolla story': 'Jolla故事',
-        'news': '新闻',
-        'community': '社区',
-        'strategy': '策略',
-        'app support': '应用支持',
-        'hardware': '硬件',
-        'jolla smartphone': 'Jolla 智能手机',
-        'developer stories': '开发者故事',
-        'open source': '开源',
-        'together.jolla.com': 'together.jolla.com',
-        'applications': '应用',
-    }[tag.lower()] for tag in original_tags]
+                'guest': '嘉宾',
+                'sailfish x': 'Sailfish X',
+                'software updates': '软件更新',
+                'sailfish os': 'Sailfish系统',
+                'sailfish 3': 'Sailfish 3',
+                'sailfish 4': 'Sailfish 4',
+                'sony xperia': 'Sony Xperia',
+                'development': '开发',
+                'jolla blog': 'Jolla博客',
+                'jolla story': 'Jolla故事',
+                'news': '新闻',
+                'community': '社区',
+                'strategy': '策略',
+                'app support': '应用支持',
+                'hardware': '硬件',
+                'jolla smartphone': 'Jolla 智能手机',
+                'developer stories': '开发者故事',
+                'open source': '开源',
+                'together.jolla.com': 'together.jolla.com',
+                'applications': '应用',
+                'sdk': 'SDK',
+                'events': '活动',
+                'mobileworldcongress': '全球移动大会',
+            }[tag.lower()] for tag in original_tags]
 
 submit_args = {
     'slug': meta['slug'],
