@@ -3,26 +3,25 @@ defmodule JollaCNAPI.DB.Model.Tie do
   import Ecto.Changeset
 
   schema "tie" do
-    field(:author, :string, null: false, comment: "创建者")
-    field(:content_md, :string, null: false, comment: "内容(Markdown)")
-    field(:content, :string, null: false, comment: "内容(Html)")
+    field(:author, :string)
+    field(:content_md, :string)
+    field(:content, :string)
 
-    field(:title, :string, null: true, comment: "标题")
+    field(:title, :string, null: true)
 
     field(
       :media_previews,
       JollaCNAPI.DB.Util.Type.JSON,
       null: false,
-      default: [],
-      comment: "媒体预览"
+      default: []
     )
 
-    field(:medias, JollaCNAPI.DB.Util.Type.JSON, null: false, default: [], comment: "媒体")
+    field(:medias, JollaCNAPI.DB.Util.Type.JSON, default: [])
 
-    field(:visiable, :boolean, null: false, default: true, comment: "可见")
+    field(:visiable, :boolean, default: true)
 
-    field(:inserted_at, :naive_datetime, null: false)
-    field(:updated_at, :naive_datetime, null: false)
+    field(:inserted_at, :naive_datetime)
+    field(:updated_at, :naive_datetime)
   end
 
   def changeset(struct, params \\ %{}) do

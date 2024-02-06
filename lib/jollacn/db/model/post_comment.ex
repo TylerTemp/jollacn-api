@@ -3,17 +3,17 @@ defmodule JollaCNAPI.DB.Model.PostComment do
   import Ecto.Changeset
 
   schema "post_comment" do
-    field(:post_slug, :string, null: false, comment: "文章slug")
-    field(:nickname, :string, null: false, comment: "评论昵称")
-    field(:ip, :string, null: false, comment: "IP")
-    field(:email, :string, null: true, comment: "email")
-    field(:content_md, :string, null: false, comment: "内容(markdown)")
-    field(:content, :string, null: false, comment: "内容(html)")
+    field(:post_slug, :string)
+    field(:nickname, :string)
+    field(:ip, :string)
+    field(:email, :string)
+    field(:content_md, :string)
+    field(:content, :string)
 
-    field(:visiable, :boolean, null: false, default: true, comment: "可见")
+    field(:visiable, :boolean, default: true)
 
-    field(:inserted_at, :naive_datetime, null: false)
-    field(:updated_at, :naive_datetime, null: false)
+    field(:inserted_at, :naive_datetime)
+    field(:updated_at, :naive_datetime)
   end
 
   def changeset(struct, params \\ %{}) do

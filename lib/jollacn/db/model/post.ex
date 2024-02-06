@@ -4,25 +4,25 @@ defmodule JollaCNAPI.DB.Model.Post do
 
   @primary_key {:slug, :string, []}
   schema "post" do
-    field(:title, :string, null: false, comment: "标题")
-    field(:author, :string, null: false, comment: "创建者")
-    field(:cover, :string, null: true, comment: "封面")
-    field(:description, :string, null: true, comment: "描述")
-    field(:headerimg, :string, null: true, comment: "顶部图像")
-    field(:content_md, :string, null: false, comment: "内容(Markdown)")
-    field(:content, :string, null: false, comment: "内容(Html)")
-    field(:tags, {:array, :string}, null: true, comment: "标签")
+    field(:title, :string)
+    field(:author, :string)
+    field(:cover, :string)
+    field(:description, :string)
+    field(:headerimg, :string)
+    field(:content_md, :string)
+    field(:content, :string)
+    field(:tags, {:array, :string})
 
-    field(:source_type, :string, null: true, comment: "null: 未知；translation：翻译；original: 原创")
-    field(:source_url, :string, null: true, comment: "原文url")
-    field(:source_title, :string, null: true, comment: "原文标题")
-    # field(:source_author, :string, null: true, comment: "原文作者")
-    field(:source_authors, {:array, :string}, null: false, default: [], comment: "原文作者")
+    field(:source_type, :string)
+    field(:source_url, :string)
+    field(:source_title, :string)
+    # field(:source_author, :string, comment: "原文作者")
+    field(:source_authors, {:array, :string}, default: [])
 
-    field(:visiable, :boolean, null: false, default: true, comment: "可见")
+    field(:visiable, :boolean, default: true)
 
-    field(:inserted_at, :naive_datetime, null: false)
-    field(:updated_at, :naive_datetime, null: false)
+    field(:inserted_at, :naive_datetime)
+    field(:updated_at, :naive_datetime)
   end
 
   def changeset(struct, params \\ %{}) do

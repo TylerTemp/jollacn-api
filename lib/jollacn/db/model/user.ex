@@ -3,12 +3,12 @@ defmodule JollaCNAPI.DB.Model.User do
   import Ecto.Changeset
 
   schema "user" do
-    field(:name, :string, null: false, comment: "昵称(唯一)")
-    field(:password_encrypted, :string, null: false, comment: "加密密码")
-    field(:permissions, {:array, :string}, null: false, default: [], comment: "权限")
+    field(:name, :string)
+    field(:password_encrypted, :string)
+    field(:permissions, {:array, :string}, default: [])
 
-    field(:inserted_at, :naive_datetime, null: false)
-    field(:updated_at, :naive_datetime, null: false)
+    field(:inserted_at, :naive_datetime)
+    field(:updated_at, :naive_datetime)
   end
 
   def changeset(struct, params \\ %{}) do
