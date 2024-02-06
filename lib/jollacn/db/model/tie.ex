@@ -7,12 +7,11 @@ defmodule JollaCNAPI.DB.Model.Tie do
     field(:content_md, :string)
     field(:content, :string)
 
-    field(:title, :string, null: true)
+    field(:title, :string)
 
     field(
       :media_previews,
       JollaCNAPI.DB.Util.Type.JSON,
-      null: false,
       default: []
     )
 
