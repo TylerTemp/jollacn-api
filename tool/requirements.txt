@@ -1,4 +1,7 @@
 qiniu
+docpie
+requests[socks]
+html5lib
 
 markdown==2.6.11
 bleach

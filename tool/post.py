@@ -333,6 +333,7 @@ else:
                 'sdk': 'SDK',
                 'events': '活动',
                 'mobileworldcongress': '全球移动大会',
+                'sailfish 5': 'Sailfish 5',
             }[tag.lower()] for tag in original_tags]
 
 submit_args = {
